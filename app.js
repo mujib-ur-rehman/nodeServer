@@ -1,30 +1,28 @@
-console.log("Express Tutorial")
-const http = require('http')
+const express = require('express')
 
-const server = http.createServer((req, res) => {
-  const url = req.url
-  if (url === '/') {
-    res.writeHead(200, {
-      'content-type': 'text/html'
-    })
-    res.write('<h1>Home<h1>')
-    res.end()
-  } else if (url === '/about') {
-    res.writeHead(200, {
-      'content-type': 'text/html'
-    })
-    res.write('<h1>About<h1>')
-    res.end()
-  } else {
-    res.writeHead(404, {
-      'content-type': 'text/html'
-    })
-    res.write('<h1>Error Page not found<h1>')
-    res.end()
-  }
-  //   console.log(req.url)
-  // console.log('user hit server')
+const app = express()
 
+app.get('/', (req, res) => {
+  console.log('user hit resource')
+  res.status(200).send('Home Page')
 })
 
-server.listen(5000)
+app.get('/about', (req, res) => {
+  res.status(200).send('About Page')
+})
+
+app.all('*', (req, res) => {
+  res.status(404).send('<h1>Error Page not found</h1>')
+})
+
+app.listen(5000, () => {
+  console.log('server is listening on port 5000...')
+})
+
+// app.get
+// app.post
+// app.put
+// app.delete
+// app.all
+// app.use
+// app.listen
