@@ -35,6 +35,28 @@ app.get('/api/products/:productid', (req, res) => {
   res.json(singleProducts)
 })
 
+app.get('/api/v1/query', (req, res) => {
+  // console.log(req.query)
+  const {
+    search,
+    limit
+  } = req.query
+  let sortedProducts = [...products]
+  if (search) {
+    sortedProducts = sortedProducts.filter((product) => {
+      return product.name.startsWith(search)
+    })
+
+  }
+  if (limit) {
+    sortedProducts = sortedProducts.slice(0, Number(limit))
+  }
+  if (sortedProducts.length < 1) {
+    return res.send('no products')
+  }
+
+  res.json(sortedProducts)
+})
 
 app.listen(5000, () => {
   console.log('Server is listening')
