@@ -1,23 +1,27 @@
-const express = require('express')
-const app = express()
-const logger = require('./logger')
-const authorize = require('./authorize')
+const express = require("express");
+const app = express();
+let { people } = require("./data");
 
-app.use(authorize)
+app.use(express.static("./methods-public"));
+app.use(express.urlencoded({ extended: false }));
+app.get("/api/people", (req, res) => {
+  res.status(200).json({
+    success: true,
+    data: people
+  });
+});
 
-app.get('/', (req, res) => {
-  res.send('home')
-})
-app.get('/about', (req, res) => {
-  res.send('about')
-})
-app.get('/api/products', logger, (req, res) => {
-  res.send('products')
-})
-app.get('/api/items', (req, res) => {
-  res.send('items')
-})
+app.post("/login", (req, res) => {
+  console.log(req.body);
+  const { name } = req.body;
+  if (name) {
+    return res.status(200).send(`Welcome ${name}`);
+  } else {
+    return res.status(401).send(`Error`);
+  }
+  res.send("POST");
+});
 
-app.listen(5000, (req, res) => {
-  console.log("Server is running")
-})
+app.listen(5000, () => {
+  console.log("Server is running");
+});
